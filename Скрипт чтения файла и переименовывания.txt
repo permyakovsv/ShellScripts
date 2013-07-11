@@ -1,0 +1,13 @@
+#!/bin/bash
+IFS=$'\n' #change delimeter by default
+for variable in `cat filename.txt`
+do
+        sourceFilename=`echo "$variable" | awk -F ";" '{print $1}'`
+        destinationFilename=`echo "$variable" | awk -F ";" '{print $2}'`
+        find . -name $sourceFilename -print0 | while read -d $'\0' file
+                do
+                fullDestinationFilename=`dirname "$file"`/$destinationFilename
+                echo $file
+                mv "$file" $fullDestinationFilename
+                done
+done

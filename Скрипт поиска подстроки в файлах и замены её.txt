@@ -1,0 +1,13 @@
+#!/bin/bash
+IFS=$'\n' #change delimeter by default
+for variable in `cat filename.txt`
+do
+        sourceFilename=`echo "$variable" | awk -F ";" '{print $1}'`
+        destinationFilename=`echo "$variable" | awk -F ";" '{print $2}'`
+        i="<a href\s*=\s*[\"''].*$sourceFilename[\"'']"
+        for file in `grep -r $i ./* | cut -d: -f1`
+        do
+                echo $file
+                sed -i "s/<a\s.*href\s*=\s*[\"'']\(.*\)$sourceFilename[\"'']/<a href=\"\1$destinationFilename\"/g" $file
+        done
+done

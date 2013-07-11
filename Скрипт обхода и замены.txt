@@ -1,0 +1,16 @@
+#!/bin/bash
+
+find . -name "Version*.txt" -print0 | while read -d $'\0' file    #find in current dir and sub dir's files like Version*.txt
+do
+  echo "$file"
+  sed -i 's/\/AAAA\//\/BBBB\//g' "$file"   # change AAAA to BBBB
+  sed -i '/https:\/\//!s/https:[\/]/https:\/\//g' "$file"  # change https:/ to https:// 
+  sed -i '/http:\/\//!s/http:[\/]/http:\/\//g' "$file" # change http:/ to http:// 
+  sed -i 's/<a\s.*href\s*=\s*["''].*File:\([^"'']*\)["''][^>]*>[^<]*<\/a>/{html} [^\1] {html}/g' "$file"
+done
+
+
+#  Change href <a href="https:/example.com/example/index.php/File:EEEEYYMMDD-_empty_optional_fields.txt" class="external free" rel="nofollow">https://
+#voa.example.com/example/index.php/File:EEE2YYMMDD-_empty_optional_fields.txt</a>
+#  to
+# {html} [^EEE2YYMMDD-_empty_optional_fields.txt] {html}
